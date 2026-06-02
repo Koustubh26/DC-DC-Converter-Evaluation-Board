@@ -27,7 +27,7 @@ ___
 
 🛠️ **Tools & Technologies**
 
-- Altium Designer
+- Altium Designer 25.8.1
 
 1) Schematic Design
 2) PCB Layout
@@ -48,6 +48,99 @@ A dedicated small-signal injection interface is incorporated to facilitate frequ
 The board further exposes critical high-speed and power nodes via strategically placed test points and measurement headers, ensuring accurate probing of gate drive signals, switching transients, and output dynamics.
 
 Collectively, the architecture is optimized for high-fidelity power electronics experimentation, bridging the gap between circuit-level design and system-level validation by supporting dynamic control testing, stability analysis, and real-world performance characterization within a single hardware platform.**
+
+
+
+___
+
+🧠 **Design Methodology & Engineering Workflow**
+
+The development of the DC–DC converter evaluation board followed a structured, simulation-driven design workflow, ensuring strong correlation between schematic design, PCB implementation, and post-layout performance analysis. The entire process was executed within Altium Designer, integrating circuit design, layout, and SI/PI validation into a unified environment.
+
+1. Requirements Definition
+
+The design process began with defining electrical, functional, and mechanical specifications, including target voltage/current levels, switching frequency, efficiency, and test bench capabilities. These requirements established constraints for both circuit design and PCB layout.
+
+2. Schematic Design & Verification
+
+Detailed schematics were developed for;
+
+- Converter topologies
+- PWM generation and control interfaces
+- Power distribution and measurement circuitry
+
+A hierarchical design structure and consistent signal naming conventions were enforced to maintain clarity and scalability. Electrical Rule Checks (ERC) were performed to eliminate connectivity errors and ensure schematic integrity before layout.
+
+3. Component Selection & Library Validation
+
+All components were selected as SMD packages to;
+
+- Reduce parasitic inductance and capacitance
+- Support high-frequency switching operation
+- Improve thermal performance and layout compactness
+
+Each component footprint and symbol was verified with manufacturer part search feature under Altium’s library tools. A centralized component library was maintained to ensure consistency and reduce integration errors.
+
+4. PCB Layout Design
+
+The schematic was translated into a physical layout with emphasis on electrical performance and manufacturability;
+
+- Stack-up defined with controlled copper thickness and dielectric properties
+- Component placement optimized to minimize high di/dt loop areas
+- Trace widths calculated based on current requirements
+- Continuous ground plane implemented for low-impedance return paths
+- Design Rule Checks (DRC) enforced for spacing, widths, and via constraints
+- 3D verification performed for mechanical alignment and connector placement
+
+5. SPICE Simulation
+
+Circuit-level validation was performed using SPICE simulations using Altium Designer's SPICE simulation extension;
+
+- Configured SPICE-compatible models for active and passive components, ensuring that simulation libraries are properly linked.
+- Transient analysis to evaluate switching behavior and steady-state response
+- Verification of output voltage ripple, waveform integrity, and dynamic response
+
+Simulation results were documented to establish a baseline for comparison with layout-level effects.
+
+6. Signal Integrity (SI) Analysis
+
+Critical high-speed nets; including PWM signals, gate drives, and feedback paths were analyzed to ensure signal fidelity;
+
+Reflection and ringing analysis
+Crosstalk evaluation between adjacent traces
+Impedance verification against target values (e.g, 50-75 Ω)
+
+Routing and termination were iteratively refined to minimize waveform distortion and ensure reliable switching behavior.
+
+7. Power Integrity (PI) Analysis
+
+The power distribution network (PDN) was evaluated to ensure stable voltage delivery under dynamic load conditions;
+
+- DC IR drop analysis to quantify voltage loss across power paths
+- Current density analysis to identify potential hotspots
+- AC impedance analysis to verify PDN stability against target impedance (Z_target = ΔV / ΔI)
+
+Thermal maps were used to guide copper pour optimization and via placement for improved current handling and heat dissipation.
+
+8. Design Validation & Documentation
+
+Final validation included;
+
+- Comprehensive schematic and layout review
+- Generation of fabrication outputs (Gerbers, drill files, assembly drawings)
+- Export of BOM, simulation results, and analysis reports
+
+The design was then prepared for prototyping and experimental validation.
+
+
+
+
+
+___
+
+
+🧱 **PCB Stack-Up & Physical Design**
+
 
 
 
