@@ -182,6 +182,91 @@ All critical issues were resolved, while non-critical warnings were reviewed and
 ___
 
 
+🔬 **SPICE Simulation & Pre-Layout Validation**
+
+1) **Overview**
+
+SPICE simulations were performed using Altium Designer’s integrated SPICE simulation extension to validate circuit behavior prior to hardware implementation. This stage serves as a critical bridge between schematic design and PCB realization.
+
+The simulation phase focused on;
+
+Verifying functional operation of both converter topologies
+Evaluating switching behavior and transient response
+Identifying potential stability and design issues early in the workflow
+
+Two converter configurations were analyzed;
+
+Closed-loop Buck Converter (voltage-controlled)
+Open-loop Forward Converter
+
+This ensured that both control-driven and open-loop power stages behaved as expected under nominal conditions.
+
+2) **Simulation Environment & Setup**
+
+Simulations were conducted within Altium Designer’s SPICE simulation environment, which allows direct integration of schematic capture and circuit-level analysis.
+
+Due to limited availability of vendor-specific SPICE models, a separate simulation project was created using generic SPICE components to approximate circuit behavior.
+
+Key implementation details;
+
+- Utilized Altium’s SPICE extension for transient and waveform analysis directly within the design environment
+- Generic SPICE models used for active and passive components
+- Separate schematic sheets created for each topology;
+1) Buck_Converter (closed-loop operation)
+2) Forward_Converter (open-loop operation)
+- Compile masking used to isolate and simulate one topology at a time
+
+This setup enabled rapid iteration and validation without leaving the PCB design ecosystem.
+
+3) **Analysis Performed**
+
+**Transient Analysis**
+
+- Evaluated switching waveforms across power devices
+- Verified output voltage regulation and steady-state behavior
+- Observed startup characteristics and transient response
+
+**Switching Behavior Evaluation**
+
+- Analyzed PWM-driven switching transitions
+- Verified duty-cycle control behavior in the buck converter
+- Observed transformer-based energy transfer in the forward converter
+
+**Performance Verification**
+
+- Checked output voltage levels against design targets
+- Evaluated ripple characteristics and waveform quality
+- Identified any abnormal oscillations or instability indicators
+
+4) **Key Observations**
+
+- The closed-loop buck converter demonstrated stable voltage regulation under nominal conditions
+- The forward converter operated correctly in open-loop configuration
+- Switching waveforms aligned with expected theoretical behavior, validating topology implementation
+
+
+5) **Practical Limitations & Engineering Tradeoffs**
+
+The simulation phase encountered several real-world constraints, addressed through engineering judgment;
+
+- Limited SPICE Model Availability
+Many manufacturer components (MOSFETs, gate drivers) lacked accurate SPICE models
+
+- Use of Generic Models
+Simplified device models limited accuracy in:
+1) Switching losses
+2) Parasitic effects
+3) High-frequency non-idealities
+
+- Project Separation for Manageability
+A dedicated simulation project was created to reduce complexity and improve workflow clarity
+
+Despite these constraints, the simulations provided sufficient functional validation to proceed to PCB implementation.
+
+___
+
+
+
 🧱 **PCB Layout Design**
 
 1) **PCB Stack-Up Strategy**
@@ -229,6 +314,24 @@ Component placement was driven by minimizing loopinductances, noise isolation, a
 2) Copper pours used for heat dissipation
 3) Thermal vias added beneath high-power components
 
+**NOTE:**
+**Following calculations are used for selecting heatsink;**
+
+**Need to calculate the sink to ambient thermal resistance (Rθsa) for both MOSFET and Diode using the below formula;**
+
+**where;**
+
+**Pd = (Tj - Ta)/ (Rθjc + Rθcs + Rθsa)**
+
+**Pd = Power dissipation in the power switch**
+       
+**Tj = Junction Temperature**
+
+**Ta = Ambient Temperature**        
+
+**Rθjc = Junction to Case Thermal Resistance**
+        
+**Rθcs = Case to Sink Thermal Resistance (Thermal paste normally has a thermal resistance of 0.4-0.5 oC/W so either of these two values are considered)**
 
 - Testability & Debugging
 
@@ -240,9 +343,15 @@ Component placement was driven by minimizing loopinductances, noise isolation, a
 
 This enables repeatable, non-intrusive measurements, critical for lab validation.
 
-
+**NOTE:
+Waiving DRC violations
+It is done when you know that there is an error and it is acceptable. 
+Instead of fixing the violation, you document that it’s allowed so that it is not flagged as an error anymore.
+Altium then records that waiver, so future DRC runs will not re-report it.**
 
 ___
+
+
 
 
 📎 **Closing Remark**
