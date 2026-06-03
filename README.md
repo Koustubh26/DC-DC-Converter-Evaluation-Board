@@ -212,8 +212,8 @@ Key implementation details;
 - Utilized Altium’s SPICE extension for transient and waveform analysis directly within the design environment
 - Generic SPICE models used for active and passive components
 - Separate schematic sheets created for each topology;
-1) Buck_Converter (closed-loop operation)
-2) Forward_Converter (open-loop operation)
+1) Buck Converter (closed-loop operation)
+2) Forward Converter (open-loop operation)
 - Compile masking used to isolate and simulate one topology at a time
 
 This setup enabled rapid iteration and validation without leaving the PCB design ecosystem.
