@@ -47,7 +47,7 @@ A dedicated small-signal injection interface is incorporated to facilitate frequ
 
 The board further exposes critical high-speed and power nodes via strategically placed test points and measurement headers, ensuring accurate probing of gate drive signals, switching transients, and output dynamics.
 
-Collectively, the architecture is optimized for high-fidelity power electronics experimentation, bridging the gap between circuit-level design and system-level validation by supporting dynamic control testing, stability analysis, and real-world performance characterization within a single hardware platform.**
+Collectively, the architecture is optimized for high-fidelity power electronics experimentation, bridging the gap between circuit-level design and system-level validation by supporting dynamic control testing, stability analysis, and real-world performance characterization within a single hardware platform.
 
 
 
@@ -57,11 +57,11 @@ ___
 
 The development of the DC–DC converter evaluation board followed a structured, simulation-driven design workflow, ensuring strong correlation between schematic design, PCB implementation, and post-layout performance analysis. The entire process was executed within Altium Designer, integrating circuit design, layout, and SI/PI validation into a unified environment.
 
-1. Requirements Definition
+1. **Requirements Definition**
 
 The design process began with defining electrical, functional, and mechanical specifications, including target voltage/current levels, switching frequency, efficiency, and test bench capabilities. These requirements established constraints for both circuit design and PCB layout.
 
-2. Schematic Design & Verification
+2. **Schematic Design & Verification**
 
 Detailed schematics were developed for;
 
@@ -71,7 +71,7 @@ Detailed schematics were developed for;
 
 A hierarchical design structure and consistent signal naming conventions were enforced to maintain clarity and scalability. Electrical Rule Checks (ERC) were performed to eliminate connectivity errors and ensure schematic integrity before layout.
 
-3. Component Selection & Library Validation
+3. **Component Selection & Library Validation**
 
 All components were selected as SMD packages to;
 
@@ -81,7 +81,7 @@ All components were selected as SMD packages to;
 
 Each component footprint and symbol was verified with manufacturer part search feature under Altium’s library tools. A centralized component library was maintained to ensure consistency and reduce integration errors.
 
-4. PCB Layout Design
+4. **PCB Layout Design**
 
 The schematic was translated into a physical layout with emphasis on electrical performance and manufacturability;
 
@@ -92,7 +92,7 @@ The schematic was translated into a physical layout with emphasis on electrical 
 - Design Rule Checks (DRC) enforced for spacing, widths, and via constraints
 - 3D verification performed for mechanical alignment and connector placement
 
-5. SPICE Simulation
+5. **SPICE Simulation**
 
 Circuit-level validation was performed using SPICE simulations using Altium Designer's SPICE simulation extension;
 
@@ -102,7 +102,7 @@ Circuit-level validation was performed using SPICE simulations using Altium Desi
 
 Simulation results were documented to establish a baseline for comparison with layout-level effects.
 
-6. Signal Integrity (SI) Analysis
+6. **Signal Integrity (SI) Analysis**
 
 Critical high-speed nets; including PWM signals, gate drives, and feedback paths were analyzed to ensure signal fidelity;
 
@@ -112,7 +112,7 @@ Impedance verification against target values (e.g, 50-75 Ω)
 
 Routing and termination were iteratively refined to minimize waveform distortion and ensure reliable switching behavior.
 
-7. Power Integrity (PI) Analysis
+7. **Power Integrity (PI) Analysis**
 
 The power distribution network (PDN) was evaluated to ensure stable voltage delivery under dynamic load conditions;
 
@@ -122,7 +122,7 @@ The power distribution network (PDN) was evaluated to ensure stable voltage deli
 
 Thermal maps were used to guide copper pour optimization and via placement for improved current handling and heat dissipation.
 
-8. Design Validation & Documentation
+8. **Design Validation & Documentation**
 
 Final validation included;
 
@@ -133,14 +133,112 @@ Final validation included;
 The design was then prepared for prototyping and experimental validation.
 
 
+___
 
+🔌 **Schematic Design**
+
+1) **Hierarchical Design Architecture**
+
+A hierarchical schematic structure was adopted to improve readability, reusability, and design abstraction;
+- Top-Level Sheet: Defines system interconnections, power inputs, PWM interfaces, and test access
+- Power Subsystem: Includes MOSFETs, gate drivers, and energy transfer components
+- Sense Subsystem: Implements feedback, sensing, and protection circuits
+
+
+
+This structure enables independent development and verification of functional blocks, while maintaining clean signal interfacing across the system.
+
+
+2) **Component Selection Strategy**
+
+Component selection was driven by electrical performance, thermal behavior, and layout efficiency;
+
+•	SMD Technology: All components were selected in surface-mount packages to minimize parasitics and improve manufacturability.
+
+•	Power Devices: Low RDS(on) MOSFETs and fast-recovery diodes were chosen to handle high-frequency switching efficiently.
+
+•	Capacitors: Low ESR ceramic capacitors were placed near power pins for decoupling; electrolytic capacitors were used for bulk energy storage.
+
+•	Feedback and Compensation Network: High-precision resistors and stable dielectric capacitors were used for accurate control behavior.
+
+•	Connectors and Test Points: Standard 2.54 mm headers and SMD test pads were added for oscilloscope probing and sensor interfacing.
+
+
+
+3) **Electrical Rule Checking (ERC) & Validation**
+
+Comprehensive Electrical Rule Checks (ERC) were performed to ensure schematic integrity prior to layout.
+
+Key checks included;
+
+- Detection of floating or unconnected nets
+- Verification of power net consistency
+- Identification of pin-type mismatches (input/output conflicts)
+- Validation of net labeling and signal connectivity
+
+All critical issues were resolved, while non-critical warnings were reviewed and selectively waived based on design intent.
 
 
 ___
 
 
-🧱 **PCB Stack-Up & Physical Design**
+🧱 **PCB Layout Design**
 
+1) **PCB Stack-Up Strategy**
+
+A 2-layer PCB stack-up was selected to balance cost and performance for the targeted power levels.
+
+- Top Layer (L1): Component placement, high-current paths, and sensitive signal routing
+- Bottom Layer (L2): Continuous ground plane and return paths
+
+Key design decisions;
+
+- 1 oz copper used on both layers to support current handling
+- FR-4 dielectric selected for standard manufacturability
+- Copper pours applied on high-current paths to reduce resistive losses and improve heat dissipation
+
+This configuration provides low impedance return paths while maintaining simplicity and cost efficiency.
+
+
+2) **Component Placement Strategy**
+
+Component placement was driven by minimizing loopinductances, noise isolation, and thermal management.
+
+- Power Loop Optimization
+
+1) Input/output capacitors were placed as close as possible to switching devices to reduce high di/dt loops
+2) Reduced loop inductance -> minimized voltage spikes and EMI
+
+
+- Grounding Strategy
+
+1) Bottom layer implemented as a solid ground plane
+2) Via stitching used extensively near power devices to ensure tight current return paths
+3) Reduced ground impedance improves switching stability
+
+
+- Control vs Power Separation
+
+1) Sensitive analog/control circuits placed away from noisy switching nodes
+2) PWM IC, feedback network, and sensing circuits were isolated from power stage which minimizes noise coupling into control loops
+
+   
+- Thermal Design
+
+1) Power devices spaced to allow effective heat spreading
+2) Copper pours used for heat dissipation
+3) Thermal vias added beneath high-power components
+
+
+- Testability & Debugging
+
+1) Dedicated test points added for;
+* Gate drive signals
+* Switching node
+* Output voltage
+* Feedback signals
+
+This enables repeatable, non-intrusive measurements, critical for lab validation.
 
 
 
