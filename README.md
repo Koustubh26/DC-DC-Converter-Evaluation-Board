@@ -351,8 +351,276 @@ Altium then records that waiver, so future DRC runs will not re-report it.**
 
 ___
 
+📡 **Signal Integrity (SI) Analysis**
+
+1) **Overview**
+
+Signal Integrity (SI) analysis was performed to ensure reliable propagation of high-speed switching and control signals across the PCB. Although DC–DC converters are primarily power circuits, fast switching transitions (high dv/dt and di/dt) introduce high-frequency effects that can degrade signal quality.
+
+The primary objective of this analysis was to;
+
+- Preserve waveform integrity of critical control signals
+- Minimize reflections, ringing, and crosstalk
+- Ensure reliable gate drive operation under high-speed switching conditions
+
+SI analysis was conducted using Altium Designer’s integrated Signal Integrity Analyzer, enabling direct evaluation of routed PCB traces.
 
 
+2) **Critical Nets Identified**
+
+Signal integrity analysis focused on high-speed and noise-sensitive nets, including;
+
+- PWM control signals
+- Gate drive paths (driver -> MOSFET gate)
+- Feedback and sensing lines
+- Control interface signals
+
+These nets are particularly sensitive due to;
+
+- Fast edge rates
+- Susceptibility to noise coupling from power switching nodes
+
+3) **SI Analysis Methodology**
+
+- Signal Modeling
+1) Appropriate driver/receiver models (IBIS or equivalent) were assigned
+2) Where detailed models were unavailable, generic signal models were used
+
+- Reflection & Ringing Analysis
+1) Evaluated impedance discontinuities along routed traces
+2) Observed overshoot, undershoot, and ringing in switching signals
+3) Ensured signal transitions remained within acceptable voltage limits
+
+- Crosstalk Evaluation
+1) Analyzed coupling between adjacent high-speed traces
+2) Identified potential interference between control and power-related signals
+
+- Impedance Verification
+1) Trace impedance evaluated against typical targets (~50–75 Ω)
+2) Routing adjusted to maintain consistent impedance where required
+
+4) **Design Optimizations**
+
+Based on SI analysis, several layout refinements were implemented;
+
+- Shortened gate drive traces to reduce propagation delay and ringing
+- Increased spacing between sensitive signal traces to reduce crosstalk
+- Ensured continuous ground reference beneath critical signals
+- Avoided routing near high-noise switching nodes
+- Improved return path continuity using ground plane and via stitching
+
+These optimizations directly improved signal fidelity and switching reliability.
+
+5) **Key Observations**
+
+- Proper grounding significantly reduced noise coupling into control signals
+- Short, direct routing of gate signals minimized waveform distortion
+- Separation of control and power regions improved overall signal quality
+- No critical SI violations were observed after layout refinement
+
+6) **Practical Considerations & Limitations**
+
+- Detailed IBIS/SPICE models were not available for all components
+- Analysis relied partially on generic signal approximations
+- SI analysis focused on relative improvements and risk mitigation, rather than exact waveform prediction
+
+This reflects real-world design conditions where perfect models are rarely available.
+
+___
+
+⚡ **Power Integrity (PI) Analysis**
+
+1) **Overview**
+
+Power Integrity (PI) analysis was performed to ensure stable and low-noise power delivery across the PCB under dynamic switching conditions. In DC–DC converters, large transient currents and high di/dt switching events can introduce voltage ripple, ground bounce, and supply instability, directly affecting performance and reliability.
+
+The objective of this analysis was to;
+
+- Maintain stable DC supply levels under load transients
+- Minimize voltage ripple and noise on power rails
+- Ensure effective current return paths
+- Optimize decoupling and power distribution network (PDN) behavior
+
+PI analysis was conducted using Altium Designer’s Power Integrity and PDN analysis capabilities, integrated within the PCB design environment.
+
+2) **Power Distribution Network (PDN)**
+
+The PCB power architecture was designed with a focus on low impedance current paths and robust grounding;
+
+- Dedicated power planes for input and regulated outputs
+- Continuous ground plane to provide low-inductance return paths
+- Wide copper pours and traces for high-current paths
+- Via stitching used to connect planes and reduce impedance
+
+This structure ensures efficient current flow while minimizing parasitic resistance and inductance.
+
+
+3) **PI Analysis Methodology**
+
+- DC Voltage Drop Analysis
+
+1) Evaluated voltage drop across high-current traces and planes
+2) Verified that IR losses remained within acceptable limits
+3) Adjusted trace widths and copper areas to reduce resistive losses
+
+- Transient Current Behavior
+
+1) Assessed response of power rails under switching conditions
+2) Identified potential supply dips during rapid load changes
+3) Ensured adequate local energy storage through decoupling
+
+- Decoupling Strategy Evaluation
+
+1) Bulk capacitors used for low-frequency energy support
+2) High-frequency decoupling capacitors placed near switching devices and ICs
+3) Capacitor placement optimized to minimize loop inductance
+
+- Return Path Optimization
+
+1) Ensured continuous and uninterrupted ground reference
+2) Minimized loop area for switching current paths
+3) Reduced ground bounce through proper plane design and stitching vias
+
+
+4) **Design Optimizations**
+
+Based on PI analysis, the following improvements were implemented;
+
+- Increased copper width for high-current paths to reduce IR drop
+- Strategically placed decoupling capacitors close to load and switching nodes
+- Implemented solid ground plane for stable return paths
+- Minimized current loop areas in switching paths
+- Added via stitching to improve vertical current distribution
+
+These optimizations enhanced power stability and reduced noise coupling across the board.
+
+5) **Key Observations**
+
+- Voltage drop across power paths remained within acceptable design margins
+- Decoupling network effectively reduced supply ripple under switching conditions
+- Proper grounding significantly minimized noise and ground bounce
+- No critical PI violations were observed after layout refinement
+
+6) **Practical Considerations & Limitations**
+
+- Exact parasitic effects (ESR, ESL, plane inductance) are approximated in analysis
+- Real-world behavior may vary due to component tolerances and layout imperfections
+- PI analysis primarily provides trend-based validation, not exact waveform prediction
+
+
+___
+
+🧾 **Conclusion & Engineering Takeaways**
+
+- **Conclusion**
+
+This project successfully delivered a modern, flexible test bench PCB for DC-DC converter evaluation, developed entirely within Altium Designer’s unified design ecosystem.
+
+The platform represents a significant upgrade over legacy through-hole implementations, transitioning to a fully SMD-based design that improves electrical performance, reduces parasitics, and supports high-frequency switching operation.
+
+The test bench enables comprehensive evaluation of both isolated and non-isolated topologies, demonstrated through;
+
+- Closed-loop buck converter implementation
+- Open-loop forward converter implementation
+- Integrated PWM generation and external control interfacing
+- Support for small-signal injection and frequency-domain analysis
+
+- **Key Engineering Outcomes**
+
+1) Modern High-Performance PCB Design
+Migration to SMD layout reduced loop inductance and parasitic effects, enabling cleaner switching behavior and improved signal fidelity.
+
+2) End-to-End Validation Workflow
+The design was systematically validated through;
+- SPICE simulation (functional and transient behavior)
+- Signal Integrity (SI) analysis (high-speed signal reliability)
+- Power Integrity (PI) analysis (stable power delivery)
+
+This multi-domain approach ensured both functional correctness and physical robustness.
+
+3) Modular & Scalable Architecture
+Hierarchical schematic design enables;
+- Independent evaluation of converter topologies
+- Easy extensibility for future designs
+- Potential integration of detachable sub-systems for device-level testing
+
+4) Testability & Experimental Readiness
+The board includes structured test access and measurement provisions, enabling safe and repeatable validation of;
+- Electrical performance
+- Control behavior
+- Thermal characteristics
+
+- **Lessons Learned**
+
+1) Cross-Domain Integration is Critical
+
+Leveraging Altium Designer as a unified platform significantly improved design efficiency by maintaining consistency across;
+
+- Schematic capture
+- Simulation
+- PCB layout
+- SI/PI analysis
+
+This reduced iteration time and minimized integration errors.
+
+2) PCB Layout Directly Impacts Converter Performance
+
+A correct schematic alone does not guarantee stable operation.
+
+Key layout factors that influenced performance;
+
+- Current return paths
+- Switching loop area
+- Component placement
+- Trace geometry
+
+Poor layout decisions can introduce instability, noise, and EMI issues even in otherwise correct designs.
+
+
+3) Signal & Power Integrity Are Foundational
+
+SI/PI analysis revealed that;
+
+- Impedance discontinuities affect switching waveforms
+- Decoupling strategy directly impacts voltage stability
+- PDN design governs overall system reliability
+
+These effects are especially pronounced in high dv/dt switching environments, even at moderate frequencies.
+
+4) Simulation is Insightful, Not Absolute
+
+SPICE simulations provided strong functional validation, but;
+
+- Limited availability of vendor-specific models introduced approximations
+- High-frequency parasitics were not fully captured
+
+This reinforced the importance of correlating simulation with hardware measurements.
+
+5) Thermal & Current Density Considerations Matter Early
+
+Even moderate power levels can create localized heating due to;
+
+- Insufficient copper area
+- High current density regions
+- Limited thermal via usage
+
+Thermal awareness must be integrated during layout, not treated as a post-design concern.
+
+
+___
+
+🔮 **Future Work**
+
+1) Modular Test Board Expansion
+- Develop detachable daughterboards for testing various power semiconductor technologies, including Silicon (Si), Silicon Carbide (SiC), and Gallium Nitride (GaN) devices.
+- Each sub-board can host a specific transistor or diode configuration, allowing direct performance comparison in identical test conditions.
+- Implement standardized board-to-board connectors for quick interchangeability and safe operation.
+
+2) Advanced Closed-Loop Digital Control
+- Integrate an external microcontroller or DSP interface to implement digital feedback control (PID or current-mode control).
+- Enable programmable switching frequency, duty cycle, and control algorithms for real-time performance optimization.
+
+___
 
 📎 **Closing Remark**
 
@@ -371,11 +639,11 @@ ___
 
 This repository contains non-confidential documentation only.
 
-All proprietary:
+All proprietary;
 
-Schematics
-PCB layouts
-Simulation files
+- Schematics
+- PCB layouts
+- Simulation files
 
 have been intentionally omitted or generalized.
 
